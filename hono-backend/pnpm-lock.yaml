@@ -11,6 +11,9 @@ importers:
       hono:
         specifier: ^4.8.8
         version: 4.8.8
+      zod:
+        specifier: ^4.0.10
+        version: 4.0.10
     devDependencies:
       wrangler:
         specifier: ^4.4.0
@@ -508,6 +511,9 @@ packages:
   zod@3.22.3:
     resolution: {integrity: sha512-EjIevzuJRiRPbVH4mGc8nApb/lVLKVpmUhAaR5R5doKGfAnGJ6Gr3CViAVjP+4FWSxCsybeWQdcgCtbX+7oZug==}
 
+  zod@4.0.10:
+    resolution: {integrity: sha512-3vB+UU3/VmLL2lvwcY/4RV2i9z/YU0DTV/tDuYjrwmx5WeJ7hwy+rGEEx8glHp6Yxw7ibRbKSaIFBgReRPe5KA==}
+
 snapshots:
 
   '@cloudflare/kv-asset-handler@0.4.0':
@@ -909,3 +915,5 @@ snapshots:
       youch-core: 0.3.3
 
   zod@3.22.3: {}
+
+  zod@4.0.10: {}
