@@ -26,9 +26,7 @@ function generateRoomId() {
   return Math.random().toString(36).slice(2, 8).toUpperCase();
 }
 
-const app = new Hono();
-
-const gameRouter = new Hono()
+const app = new Hono()
   .use(
     "*",
     cors({
@@ -58,5 +56,5 @@ const gameRouter = new Hono()
     return c.json({ success: true, game: newGame }, 200);
   });
 
-export const appRouter = app.route("/", gameRouter);
-export type AppRouter = typeof appRouter;
+export default app;
+// export type AppRouter = typeof appRouter;

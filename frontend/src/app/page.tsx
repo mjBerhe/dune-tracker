@@ -1,17 +1,11 @@
 "use client";
 
-import { AppRouter } from "../typegen/hono-api";
-import { hc } from "hono/client";
-
-const client = hc<AppRouter>("http://localhost:8787/");
-
 export default function Home() {
   const handleClick = async () => {
-    const res = await client["create-game"].$post({
-      json: {
-        host: "Matt",
-        maxPlayers: 4,
-      },
+    const res = await fetch("http://localhost:8787/create-game", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ host: "Matt", maxPlayers: 4 }),
     });
 
     const data = await res.json();
