@@ -1,6 +1,6 @@
 "use client";
 
-import type { AppType } from "../../../hono-backend/src/index";
+import type { AppType } from "@backend/index";
 import { hc } from "hono/client";
 
 const client = hc<AppType>("http://localhost:8787/");

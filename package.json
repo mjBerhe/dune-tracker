@@ -1,5 +1,5 @@
 {
-	"dependencies": {
-		"vercel": "^44.6.4"
-	}
+  "name": "dune",
+  "private": true,
+  "version": "1.0.0"
 }

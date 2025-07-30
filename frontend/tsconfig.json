@@ -19,7 +19,8 @@
       }
     ],
     "paths": {
-      "@/*": ["./frontend/src/*"]
+      "@/*": ["./frontend/src/*"],
+      "@backend/*": ["../hono-backend/src/*"]
     }
   },
   "include": [
@@ -28,7 +29,7 @@
     "frontend/.next/types/**/*.ts",
     "next-env.d.ts",
     ".next/types/**/*.ts",
-    "../../hono-backend/src"
+    "../hono-backend/src"
   ],
   "exclude": ["node_modules"]
 }
