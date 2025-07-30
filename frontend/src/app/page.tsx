@@ -1,5 +1,10 @@
 "use client";
 
+import type { AppType } from "../../../hono-backend/src";
+import { hc } from "hono/client";
+
+const client = hc<AppType>("http://localhost:8787/");
+
 export default function Home() {
   const handleClick = async () => {
     const res = await fetch("http://localhost:8787/create-game", {

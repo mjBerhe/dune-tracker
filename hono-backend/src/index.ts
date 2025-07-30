@@ -57,4 +57,4 @@ const app = new Hono()
   });
 
 export default app;
-// export type AppRouter = typeof appRouter;
+export type AppType = typeof app;
