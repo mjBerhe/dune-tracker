@@ -5,7 +5,9 @@
     "dev": "wrangler dev",
     "deploy": "wrangler deploy --minify",
     "build": "pnpm run build",
-    "cf-typegen": "wrangler types --env-interface CloudflareBindings"
+    "cf-typegen": "wrangler types --env-interface CloudflareBindings",
+    "typegen": "rollup --config typegen/rollup.config.cjs --bundleConfigAsCjs",
+    "typegen:watch": "nodemon --watch src --ext ts --exec 'pnpm typegen'"
   },
   "dependencies": {
     "@hono/zod-validator": "^0.7.2",
@@ -13,6 +15,8 @@
     "zod": "^4.0.10"
   },
   "devDependencies": {
+    "rollup": "^4.46.2",
+    "rollup-plugin-dts": "^6.2.1",
     "wrangler": "^4.4.0"
   }
 }

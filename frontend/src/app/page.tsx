@@ -1,9 +1,9 @@
 "use client";
 
-import { AppType } from "../../../hono-backend/src/";
+import { AppRouter } from "../typegen/hono-api";
 import { hc } from "hono/client";
 
-const client = hc<AppType>("http://localhost:8787/");
+const client = hc<AppRouter>("http://localhost:8787/");
 
 export default function Home() {
   const handleClick = async () => {

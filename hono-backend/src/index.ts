@@ -3,11 +3,6 @@ import { cors } from "hono/cors";
 import { z } from "zod";
 import { zValidator } from "@hono/zod-validator";
 
-const createGameSchema = z.object({
-  host: z.string().min(1), // ensures non-empty stringf
-  maxPlayers: z.coerce.number(),
-});
-
 type GameRoom = {
   id: string;
   name: string;
@@ -17,6 +12,13 @@ type GameRoom = {
   // createdAt?
 };
 
+const createGameSchema = z.object({
+  host: z.string().min(1), // ensures non-empty string
+  maxPlayers: z.coerce.number(),
+});
+
+export type CreateGameInput = z.infer<typeof createGameSchema>;
+
 const rooms = new Map<string, GameRoom>();
 
 // Generate simple room ID
@@ -24,11 +26,13 @@ function generateRoomId() {
   return Math.random().toString(36).slice(2, 8).toUpperCase();
 }
 
-const app = new Hono()
+const app = new Hono();
+
+const gameRouter = new Hono()
   .use(
     "*",
     cors({
-      origin: ["http://localhost:3000", "https://arrakis-observer.vercel.app"], // Allow your local Next.js frontend
+      origin: ["http://localhost:3000", "https://arrakis-observer.vercel.app"],
       credentials: true,
     })
   )
@@ -54,5 +58,5 @@ const app = new Hono()
     return c.json({ success: true, game: newGame }, 200);
   });
 
-export type AppType = typeof app;
-export default app;
+export const appRouter = app.route("/", gameRouter);
+export type AppRouter = typeof appRouter;
