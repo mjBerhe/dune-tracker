@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@hono/zod-validator':
+        specifier: ^0.7.2
+        version: 0.7.2(hono@4.8.8)(zod@4.0.10)
       hono:
         specifier: ^4.8.8
         version: 4.8.8
@@ -220,6 +223,12 @@ packages:
     engines: {node: '>=18'}
     cpu: [x64]
     os: [win32]
+
+  '@hono/zod-validator@0.7.2':
+    resolution: {integrity: sha512-ub5eL/NeZ4eLZawu78JpW/J+dugDAYhwqUIdp9KYScI6PZECij4Hx4UsrthlEUutqDDhPwRI0MscUfNkvn/mqQ==}
+    peerDependencies:
+      hono: '>=3.9.0'
+      zod: ^3.25.0 || ^4.0.0
 
   '@img/sharp-darwin-arm64@0.33.5':
     resolution: {integrity: sha512-UT4p+iz/2H4twwAoLCqfA9UH5pI6DggwKEGuaPy7nCVQ8ZsiY5PIcrRvD1DzuY3qYL07NtIQcWnBSY/heikIFQ==}
@@ -624,6 +633,11 @@ snapshots:
 
   '@esbuild/win32-x64@0.25.4':
     optional: true
+
+  '@hono/zod-validator@0.7.2(hono@4.8.8)(zod@4.0.10)':
+    dependencies:
+      hono: 4.8.8
+      zod: 4.0.10
 
   '@img/sharp-darwin-arm64@0.33.5':
     optionalDependencies:
