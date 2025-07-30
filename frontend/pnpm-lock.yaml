@@ -27,7 +27,7 @@ importers:
         specifier: ^44.6.4
         version: 44.6.4
       zod:
-        specifier: ^4.0.14
+        specifier: ^4.0.10
         version: 4.0.14
     devDependencies:
       '@eslint/eslintrc':
