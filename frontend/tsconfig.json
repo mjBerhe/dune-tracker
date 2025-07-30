@@ -27,7 +27,8 @@
     "**/*.tsx",
     "frontend/.next/types/**/*.ts",
     "next-env.d.ts",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    "../../hono-backend/src"
   ],
   "exclude": ["node_modules"]
 }
