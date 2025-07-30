@@ -9,11 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@hono/zod-validator": "^0.7.2",
     "hono": "^4.8.8",
     "next": "15.4.3",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "vercel": "^44.6.4"
+    "vercel": "^44.6.4",
+    "zod": "^4.0.14"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
