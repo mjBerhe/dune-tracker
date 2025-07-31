@@ -12,13 +12,6 @@ type GameRoom = {
   // createdAt?
 };
 
-const createGameSchema = z.object({
-  host: z.string().min(1), // ensures non-empty string
-  maxPlayers: z.coerce.number(),
-});
-
-export type CreateGameInput = z.infer<typeof createGameSchema>;
-
 const rooms = new Map<string, GameRoom>();
 
 // Generate simple room ID
@@ -37,24 +30,35 @@ const app = new Hono()
   .get("/", (c) => {
     return c.text("Hello Hono!");
   })
-  .post("/create-game", zValidator("json", createGameSchema), async (c) => {
-    const data = c.req.valid("json");
-    const { host, maxPlayers } = data;
+  .post(
+    "/create-game",
+    zValidator(
+      "json",
+      z.object({
+        hostName: z.string().min(1), // ensures non-empty string
+        hostId: z.string().min(5),
+        maxPlayers: z.coerce.number(),
+      })
+    ),
+    async (c) => {
+      const data = c.req.valid("json");
+      const { hostName, hostId, maxPlayers } = data;
 
-    const id = generateRoomId();
+      const gameId = generateRoomId();
 
-    const newGame: GameRoom = {
-      id,
-      name: host,
-      maxPlayers: maxPlayers,
-      players: [{ id: "0", name: host, money: 0 }],
-      started: false,
-    };
+      const newGame: GameRoom = {
+        id: gameId,
+        name: hostName,
+        maxPlayers: maxPlayers,
+        players: [{ id: hostId, name: hostName, money: 1000 }],
+        started: false,
+      };
 
-    rooms.set(id, newGame);
+      rooms.set(gameId, newGame);
 
-    return c.json({ success: true, game: newGame }, 200);
-  });
+      return c.json({ success: true, game: newGame }, 200);
+    }
+  );
 
 export default app;
 export type AppType = typeof app;

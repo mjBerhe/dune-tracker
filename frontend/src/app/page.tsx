@@ -2,19 +2,29 @@
 
 import type { AppType } from "@backend/index";
 import { hc } from "hono/client";
+import { useRouter } from "next/navigation";
+import { getOrCreatePlayer } from "../utils/player";
 
 const client = hc<AppType>("http://localhost:8787/");
 
 export default function Home() {
+  const router = useRouter();
+  const player = getOrCreatePlayer();
+
   const handleClick = async () => {
-    const res = await fetch("http://localhost:8787/create-game", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ host: "Matt", maxPlayers: 4 }),
+    const res = await client["create-game"].$post({
+      json: {
+        hostName: player?.name ?? "Default Name",
+        hostId: player?.id ?? "12345",
+        maxPlayers: 4,
+      },
     });
 
     const data = await res.json();
-    console.log(data);
+
+    if (data.success && data.game.id) {
+      router.push(`/room/${data.game.id}`);
+    }
   };
 
   return (
