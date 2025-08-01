@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { hc, InferResponseType } from "hono/client";
 import { AppType } from "@backend/index";
 import { useParams } from "next/navigation";
@@ -8,11 +8,15 @@ import type { GameRoom } from "@backend/index";
 
 const client = hc<AppType>("http://localhost:8787/");
 
+// const wsClient = hc<WsAppType>("http://localhost:8787/");
+
 type ResponseType200 = InferResponseType<(typeof client)["get-room"][":id"]["$get"], 200>;
 
 export default function Room() {
   const { roomId } = useParams();
   const [room, setRoom] = useState<GameRoom | null>(null);
+
+  const wsRef = useRef<WebSocket | null>(null);
 
   useEffect(() => {
     const fetchRoom = async () => {
@@ -33,6 +37,29 @@ export default function Room() {
     fetchRoom();
   }, []);
 
+  // intializing web socket
+  useEffect(() => {
+    const ws = client.ws[":roomId"].$ws({ param: { roomId: roomId as string } });
+    wsRef.current = ws;
+
+    ws.onmessage = (e) => {
+      const data = JSON.parse(e.data);
+      console.log("Received:", data);
+    };
+
+    ws.onopen = () => {
+      console.log("WebSocket connected!");
+    };
+
+    return () => {
+      ws.close();
+    };
+  }, [roomId]);
+
+  const handleAddSolari = () => {
+    wsRef.current?.send(JSON.stringify({ type: "add-solari", amount: 1 }));
+  };
+
   if (!room) {
     return <div>Loading room...</div>;
   }
@@ -48,6 +75,8 @@ export default function Room() {
           ))}
         </div>
       </div>
+
+      <button onClick={handleAddSolari}>Add Solari</button>
     </div>
   );
 }

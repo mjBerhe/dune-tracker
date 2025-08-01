@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { success, z } from "zod";
 import { zValidator } from "@hono/zod-validator";
+import { wsRoute } from "./routes/ws";
 
 const STARTING_SOLARI = 0;
 const STARTING_WATER = 1;
@@ -127,7 +128,11 @@ const app = new Hono()
     }
 
     return c.json({ success: true, room: room }, 200);
-  });
+  })
+  .route("/ws", wsRoute);
+
+// const wsApp = wsRoute;
 
 export default app;
 export type AppType = typeof app;
+// export type WsAppType = typeof wsApp;
