@@ -1,13 +1,17 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
-import { z } from "zod";
+import { success, z } from "zod";
 import { zValidator } from "@hono/zod-validator";
 
-type GameRoom = {
+const STARTING_SOLARI = 0;
+const STARTING_WATER = 1;
+const STARTING_SPICE = 0;
+
+export type GameRoom = {
   id: string;
   name: string;
   maxPlayers: number;
-  players: { id: string; name: string; money: number }[];
+  players: { id: string; name: string; solari: number; water: number; spice: number }[];
   started: boolean;
   // createdAt?
 };
@@ -50,7 +54,15 @@ const app = new Hono()
         id: gameId,
         name: hostName,
         maxPlayers: maxPlayers,
-        players: [{ id: hostId, name: hostName, money: 1000 }],
+        players: [
+          {
+            id: hostId,
+            name: hostName,
+            solari: STARTING_SOLARI,
+            water: STARTING_WATER,
+            spice: STARTING_SPICE,
+          },
+        ],
         started: false,
       };
 
@@ -58,7 +70,64 @@ const app = new Hono()
 
       return c.json({ success: true, game: newGame }, 200);
     }
-  );
+  )
+  .post(
+    "/join-game",
+    zValidator(
+      "json",
+      z.object({
+        playerId: z.string().min(5),
+        playerName: z.string().min(1),
+        roomId: z.string().min(1),
+      })
+    ),
+    async (c) => {
+      const data = c.req.valid("json");
+      const { playerId, playerName, roomId } = data;
+
+      const room = rooms.get(roomId);
+      if (!room) {
+        return c.json({ error: "Room does not exist" }, 404);
+      }
+
+      const exisitingPlayer = room.players.find((p) => p.id === playerId);
+      if (!exisitingPlayer) {
+        if (room.players.length >= room.maxPlayers) {
+          return c.json({ error: "Room is full" }, 400);
+        }
+
+        // else there is space for the player to join
+        room.players.push({
+          id: playerId,
+          name: playerName,
+          solari: STARTING_SOLARI,
+          water: STARTING_WATER,
+          spice: STARTING_SPICE,
+        });
+      } else {
+        // player is already in the room
+        return c.json({ error: "Already inside room" }, 400);
+      }
+
+      return c.json({ success: true, game: room }, 200);
+    }
+  )
+  .get("/rooms", (c) => {
+    const availableRooms = Array.from(rooms.values()).filter(
+      (room) => room.players.length < room.maxPlayers
+    );
+    return c.json({ success: true, rooms: availableRooms });
+  })
+  .get("/get-room/:id", zValidator("param", z.object({ id: z.string() })), (c) => {
+    const { id } = c.req.param();
+    const room = rooms.get(id);
+
+    if (!room) {
+      return c.json({ error: "Room not found" }, 404);
+    }
+
+    return c.json({ success: true, room: room }, 200);
+  });
 
 export default app;
 export type AppType = typeof app;
