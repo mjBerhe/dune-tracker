@@ -25,8 +25,8 @@ export const wsRoute = new Hono().get(
     // roomSockets.add(socket);
 
     return {
-      onMessage(evt, ws) {
-        const data = JSON.parse(evt.data);
+      onMessage: (event: MessageEvent) => {
+        const data = event.data;
         console.log(data);
 
         if (data.type === "add-solari") {
